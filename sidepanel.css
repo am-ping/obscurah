@@ -1,0 +1,221 @@
+* {
+    letter-spacing: 2px;
+}
+
+body {
+    background-color: #c6d3d5;
+    line-height: 1.4;
+}
+
+h1 {
+    margin-top: 0px;
+    text-align: center;
+}
+
+/* Collapsible */
+.collapsible {
+    box-shadow: 0 -2px 3px 0 #47777997 inset,
+                1px 1px 2px 0 #6a7475;
+    background-color: cadetblue;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    border-radius: 30px;
+    text-align: left;
+    font-size: 15px;
+}
+
+.active, .collapsible:hover {
+    background-color: #d48894;
+    box-shadow: 0 -2px 3px 0 #b05975 inset,
+                1px 1px 2px 0 #957980;
+    color: #f6ebf0;
+}
+
+.collapsible:after {
+    content: '\002B';
+    border-radius: 10px 10px 0 0;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2212";
+    color: #f6ebf0;
+}
+
+#labels {
+    display: none;
+}
+
+.content {
+    margin: 8px 0;
+    padding: 0 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.1s ease-out;
+}
+
+#months {
+    margin: 8px 0;
+    display: flex;
+    justify-content: center;
+}
+
+input[name='month'] {
+    display: none;
+}
+
+label[for="month1"] {
+    border-radius: 30px 0 0 30px;
+    border: 2px solid #6a7475;
+    border-right: 0;
+}
+
+label[for="month2"] {
+    border-top: 2px solid #6a7475;
+    border-bottom: 2px solid #6a7475;
+}
+
+label[for="month3"] {
+    border-radius: 0 30px 30px 0;
+    border: 2px solid #6a7475;
+    border-left: 0;
+}
+
+.month-label {
+    display: inline-block;
+    padding: 10px 15px;
+    box-shadow: 0 2px 5px 0 #dff1ea inset,
+                0 -2px 5px 0 #7d918a inset,
+                0 1px 2px 0 #6a7475;
+    background-color: #afc9bc;
+    text-align: center;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"]:checked + .month-label {
+    box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, .25) inset,
+                -1px -1px 1px 0 rgba(255, 255, 255, 0.808) inset;
+    background-color: #d48894;
+    color: white;
+    border: none;
+}
+
+#box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+
+.label {
+    box-shadow: 1px 1px 1px 0 #dff1ea inset,
+                -1px -2px 1px 0 #7d918a inset,
+                0 1px 2px 0 #6a7475;
+    background-color: #afc9bc;
+    color: #648174;
+    border: 2px solid #495e55;
+    font-weight: bold;
+    white-space: nowrap;
+    padding: 10px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.selectedLabel, .label:hover {
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .25) inset,
+                -1px -1px 1px 0 rgba(255, 255, 255, 0.808) inset;
+    background-color: #d48894;
+    color: white;
+    border: 2px solid #c6d3d5;
+}
+
+.submit {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+/* Cycle generator */
+form label, #genCycles {
+    padding: 15px;
+    font-size: 14px;
+    color: #091024;
+}
+
+form input {
+    padding: 15px;
+    margin: 8px 0;
+    border: 0;
+    width: 80%;
+    border-radius: 30px;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 65%;
+    background: #afc9bc;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .25) inset,
+                -1px -1px 1px 0 rgba(255, 255, 255, 0.808) inset;
+    background-color: #d48894;
+    outline: none;
+    transition: 0.3s;
+    cursor: pointer;
+    padding: 6px;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    background-color: #afc9bc;
+    border-radius: 30px;
+    border: 2px solid #6a7475;
+    cursor: pointer;
+    box-shadow: 0 2px 2px 0 #dff1ea inset,
+                0 -3px 4px 0 #7d918a inset,
+                0 1px 1px 0 #6a7475;
+}
+
+.slider-value {
+    font-size: 17px;
+    font-weight: normal;
+    padding: 10px;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .25) inset,
+                -1px -1px 1px 0 rgba(255, 255, 255, 0.808) inset;
+    background-color: #d48894;
+    color: white;
+    border-radius: 30px;
+    white-space: nowrap;
+    border: 0;
+}
+
+#genCycles {
+    background-color: #afc9bc;
+    margin-bottom: 4px;
+    box-shadow: 0 2px 2px 0 #dff1ea inset,
+                0 -3px 4px 0 #7d918a inset,
+                0 1px 1px 0 #6a7475;
+    border: #091024;
+    border: 2px solid #6a7475;
+}

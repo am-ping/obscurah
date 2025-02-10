@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Aegis</title>
+        <link rel="stylesheet" href="sidepanel.css">
+    </head>
+    <body>
+        <button class="collapsible" id="cycle">Cycle Generator</button>
+        <div class="content">
+            <form>
+                <label for="month">Month your last period began</label>
+                <div id="months">
+                    <input type="radio" id="month1" name="month" value="month1">
+                    <label for="month1" class="month-label"></label>
+
+                    <input type="radio" id="month2" name="month" value="month2">
+                    <label for="month2" class="month-label"></label>
+
+                    <input type="radio" id="month3" name="month" value="month3">
+                    <label for="month3" class="month-label"></label>
+                </div>
+                
+                <label class="slider-label">Duration of your last period</label><br>
+                <div class="slider-container">
+                    <input type="range" min="1" max="10" value="5" class="slider" id="periodSlider">
+                    <span class="slider-value label" id="periodLength">05</span>
+                </div>
+                <label for="cycleLength">Average cycle length</label>
+                <div class="slider-container">
+                    <input type="range" min="20" max="50" value="28" class="slider" id="cycleSlider">
+                    <span class="slider-value label" id="cycleLength">28</span>
+                </div>
+                
+            </form>
+            <button class="submit" id="genCycles">Generate Cycles</button>
+        </div>
+        <button class="collapsible" id="labels">Cycles</button>
+        <div class="content">
+            <div id="allLabels">
+                <div id="box"></div>
+            </div>
+        </div>
+
+        <script src="sidepanel.js"></script>
+    </body>
+</html>

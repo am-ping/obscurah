@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "name": "Aegis",
+    "description": "Private Period & Menstrual Cycle Tracker",
+    "version": "1.0",
+    "permissions": [
+        "storage",
+        "sidePanel",
+        "scripting"
+    ],
+    "background": {
+        "service_worker": "service-worker.js"
+    },
+    "side_panel": {
+        "default_path": "sidepanel.html"
+    },
+    "action": {
+        "default_title": "Click to open side panel"
+    },
+    "icons": {
+        "16": "images/icon.png",
+        "32": "images/icon.png",
+        "48": "images/icon.png",
+        "128": "images/icon.png"
+    },
+    "host_permissions": ["*://*/*"],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    }
+}
