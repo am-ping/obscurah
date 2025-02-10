@@ -25,6 +25,7 @@ h1 {
     border: none;
     border-radius: 30px;
     text-align: left;
+    outline: none;
     font-size: 15px;
 }
 
@@ -99,9 +100,10 @@ label[for="month3"] {
 }
 
 input[type="radio"] {
-    display: none;
+    display: none; /* Hide default radio button */
 }
 
+/* Change background color when selected */
 input[type="radio"]:checked + .month-label {
     box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, .25) inset,
                 -1px -1px 1px 0 rgba(255, 255, 255, 0.808) inset;
@@ -218,4 +220,81 @@ form input {
                 0 1px 1px 0 #6a7475;
     border: #091024;
     border: 2px solid #6a7475;
+}
+
+/* CALENDAR */
+.fc .fc-col-header-cell {
+    background-color: cadetblue;
+    color: white;
+    font-weight: normal;
+    box-shadow: none;
+    background-color: cadetblue;
+}
+
+:root {
+    --fc-border-color: black;
+    --fc-neutral-text-color: black;
+}
+
+.fc .fc-scrollgrid-section-sticky > * {
+    background-color: transparent;
+}
+
+.fc-scrollgrid-section-body {
+    background: #afc9bc;
+    box-shadow: 2px 2px 3px 0 #6a7475;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: #edd1ac;
+}
+
+.fc-event {
+    border-radius: 10px;
+    padding-left: 4px;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .25) inset;
+    border: none;
+}
+
+.fc-day-sun, .fc-day-sat {
+    background-color: #98ada2;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .25) inset;
+}
+
+.fc-today-button.fc-button {
+    display: none;
+}
+
+.fc-prev-button.fc-button, .fc-next-button.fc-button {
+    box-shadow: 1px 1px 1px 0 #47777991 inset,
+                -2px -3px 2px 0 #477779 inset;
+    background-color: cadetblue;
+}
+
+.fc-prev-button.fc-button {
+    border-radius: 30px 0 0 30px;
+    color: white;
+}
+
+.fc-next-button.fc-button {
+    border-radius: 0 30px 30px 0;
+    color: white;
+}
+
+.fc-prev-button.fc-button:hover, .fc-next-button.fc-button:hover,
+.fc .fc-button-primary:not(:disabled):active {
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .25) inset;
+    background-color: #d48894;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 0.5em;
+}
+
+.fc-direction-ltr .fc-daygrid-event.fc-event-end {
+    margin-right: 0;
+}
+
+.fc-direction-ltr .fc-daygrid-event.fc-event-start {
+    margin-left: 0;
 }

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Aegis</title>
+        <title>Habitude</title>
         <link rel="stylesheet" href="sidepanel.css">
+        <script src="fullcalendar-6.1.15/dist/index.global.min.js"></script>
     </head>
     <body>
         <button class="collapsible" id="cycle">Cycle Generator</button>
         <div class="content">
             <form>
                 <label for="month">Month your last period began</label>
+                <input type="month" id="month" name="month">
                 <div id="months">
                     <input type="radio" id="month1" name="month" value="month1">
                     <label for="month1" class="month-label"></label>
@@ -19,7 +21,7 @@
                     <input type="radio" id="month3" name="month" value="month3">
                     <label for="month3" class="month-label"></label>
                 </div>
-                
+
                 <label class="slider-label">Duration of your last period</label><br>
                 <div class="slider-container">
                     <input type="range" min="1" max="10" value="5" class="slider" id="periodSlider">
@@ -30,7 +32,6 @@
                     <input type="range" min="20" max="50" value="28" class="slider" id="cycleSlider">
                     <span class="slider-value label" id="cycleLength">28</span>
                 </div>
-                
             </form>
             <button class="submit" id="genCycles">Generate Cycles</button>
         </div>
@@ -41,6 +42,8 @@
             </div>
         </div>
 
+        <!-- calendar -->
+        <div id='calendar'></div>
         <script src="sidepanel.js"></script>
     </body>
 </html>

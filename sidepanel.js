@@ -1,6 +1,49 @@
 class BaseController {
     constructor() {
+        this.calendarEl = document.getElementById('calendar');
         this.box = document.getElementById('box');
+        this.calendar = null;
+    }
+
+    initCalendar() {
+        this.calendar = new FullCalendar.Calendar(this.calendarEl, {
+            initialView: 'dayGridMonth',
+            height: "auto",
+            selectable: true,
+            events: [],
+
+            eventDrop: (info) => console.log(info.event._def.title, info.event._instance.range, info.oldEvent._instance.range),
+            eventResize: (info) => this.resizeCycle(info.endDelta)
+        });
+        this.calendar.render();
+        this.calendar.updateSize();
+        new ResizeObserver(() => this.calendar.updateSize()).observe(this.calendarEl);
+    }
+
+    resizeCycle(endDelta) {
+
+        function addSubDays(dateString, daysToAdd) {
+            let date = new Date(dateString + "T00:00:00Z");
+            date.setUTCDate(date.getUTCDate() + daysToAdd);
+            return date.toISOString().split('T')[0];
+        }
+        
+        chrome.storage.local.get(['cycles'], (data) => {
+            if (!data.cycles) return;
+    
+            let updatedCycles = { ...data.cycles };
+    
+            Object.keys(updatedCycles).forEach(cycleKey => {
+                updatedCycles[cycleKey] = updatedCycles[cycleKey].map(item => ({
+                    ...item,
+                    periodEnd: addSubDays(item.periodEnd, endDelta.days)
+                }));
+            });
+    
+            chrome.storage.local.set({ cycles: updatedCycles }, () => { 
+                console.log("Updated cycles saved:", updatedCycles);
+            });
+        });
     }
 
     loadLabels() {
@@ -24,7 +67,50 @@ class BaseController {
         const label = document.createElement('button');
         label.textContent = labelName.toString().padStart(2, '0');
         label.classList.add('label');
-        this.box.appendChild(label);;
+        this.box.appendChild(label);
+        label.addEventListener('click', () => this.loadCycleEvents(labelName));
+    }
+
+    loadCycleEvents(cycleKey) {
+        chrome.storage.local.get(['cycles'], (data) => {
+            if (!data.cycles || !data.cycles[cycleKey]) return;
+
+            const cycleData = data.cycles[cycleKey];
+            let events = [];
+
+            cycleData.forEach((cycleItem) => {
+                // Menstrual Cycle event (Full cycle)
+                // events.push({
+                //     title: 'Menstrual Cycle',
+                //     start: cycleItem.start,
+                //     end: cycleItem.cycleEnd,
+                //     color: 'cadetblue',
+                //     editable: true,
+                //     allDay: 'true'
+                // });
+
+                // Period event
+                events.push({
+                    title: 'Period',
+                    start: cycleItem.start,
+                    end: cycleItem.periodEnd,
+                    color: '#d48894',
+                    editable: true,
+                    allDay: 'false'
+                },{
+                    title: 'Ovulation',
+                    start: cycleItem.ovulationStart,
+                    end: cycleItem.ovulationEnd,
+                    color: 'lightcoral',
+                    editable: true,
+                    allDay: 'false'
+                });
+            });
+
+            this.calendar.removeAllEvents();
+            events.forEach(event => this.calendar.addEvent(event));
+            this.calendar.updateSize();
+        });
     }
 }
 
@@ -33,6 +119,7 @@ class CycleTracker extends BaseController {
         super();
         this.genCyclesBtn = document.getElementById('genCycles');
         this.setupDateRestrictions();
+        this.initCalendar();
         this.genCyclesBtn.addEventListener('click', () => this.generateCycles());
     }
 
@@ -64,7 +151,7 @@ class CycleTracker extends BaseController {
         let periodLength = +document.getElementById('periodLength').textContent;
         let cycleLength = +document.getElementById('cycleLength').textContent;
         
-        function addDaysToDate(dateString, daysToAdd) {
+        function addSubDays(dateString, daysToAdd) {
             let date = new Date(dateString + "T00:00:00Z");
             date.setUTCDate(date.getUTCDate() + daysToAdd);
             return date.toISOString().split('T')[0];
@@ -74,10 +161,12 @@ class CycleTracker extends BaseController {
             let currentDate = `${year}-${month}-${i.toString().padStart(2, '0')}`;
             cycles[i] = Array.from({ length: 5 }, () => {
                 let start = currentDate;
-                let periodEnd = addDaysToDate(start, periodLength);
-                let cycleEnd = addDaysToDate(start, cycleLength);
+                let periodEnd = addSubDays(start, periodLength);
+                let cycleEnd = addSubDays(start, cycleLength);
+                let ovulationStart = addSubDays(cycleEnd, -14);
+                let ovulationEnd = addSubDays(cycleEnd, -13);
                 currentDate = cycleEnd;
-                return { start, periodEnd, cycleEnd };
+                return { start, periodEnd, cycleEnd, ovulationStart, ovulationEnd };
             });
         }
 
@@ -95,6 +184,7 @@ class UIController extends BaseController {
         super();
         this.initCollapsibles();
         this.loadLabels();
+        this.initCalendar();
         this.cycleTracker = new CycleTracker();
         this.initLabelSelection();
     }
