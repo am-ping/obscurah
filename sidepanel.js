@@ -28,7 +28,7 @@ class BaseController {
         let newStart = new Date(newEvent['start']).toISOString().split("T")[0];
         let newEnd = new Date(newEvent['end']).toISOString().split("T")[0];
 
-        console.log(oldStart, oldEnd, newStart, newEnd);
+        console.log(title, oldStart, oldEnd, newStart, newEnd);
 
         function daysDiff(d1, d2) {
             return Math.round((new Date(d2) - new Date(d1)) / (1000 * 3600 * 24));
@@ -49,46 +49,101 @@ class BaseController {
 
             console.log(updatedCycles);
 
-            for (const cycleKey of Object.keys(updatedCycles[selectedLabel])) {
-            
-                if (updatedCycles[selectedLabel][cycleKey].cycleEnd === oldStart) {
-                    minCycKey = cycleKey;
-                    
-                    console.log(cycleKey);
-                    break;
-                }
-            }
+            if (title == 'Period') {
 
-            Object.keys(updatedCycles).forEach(cycleKey => {
-                let cycleArray = updatedCycles[cycleKey];
-        
-                updatedCycles[cycleKey] = cycleArray.map((item, index) => {
-                    if (index == minCycKey) {
-                        return {
-                            ...item,
-                            cycleDuration: item.cycleDuration + diff,
-                            fertStart: addSubDays(item.fertStart, diff),
-                            fertEnd: addSubDays(item.fertEnd, diff),
-                            ovulationStart: addSubDays(item.ovulationStart, diff),
-                            ovulationEnd: addSubDays(item.ovulationEnd, diff),
-                            cycleEnd: addSubDays(item.cycleEnd, diff)
-                        };
-                    } else if (index > minCycKey) {
-                        return {
-                            ...item,
-                            start: addSubDays(item.start, diff),
-                            periodEnd: addSubDays(item.periodEnd, diff),
-                            cycleDuration: item.cycleDuration + diff,
-                            fertStart: addSubDays(item.fertStart, diff),
-                            fertEnd: addSubDays(item.fertEnd, diff),
-                            ovulationStart: addSubDays(item.ovulationStart, diff),
-                            ovulationEnd: addSubDays(item.ovulationEnd, diff),
-                            cycleEnd: addSubDays(item.cycleEnd, diff)
-                        }
+                for (const cycleKey of Object.keys(updatedCycles[selectedLabel])) {
+                
+                    if (updatedCycles[selectedLabel][cycleKey].cycleEnd === oldStart) {
+                        minCycKey = cycleKey;
+                        
+                        console.log(cycleKey);
+                        break;
                     }
-                    return item;
+                }
+
+                Object.keys(updatedCycles).forEach(cycleKey => {
+                    let cycleArray = updatedCycles[cycleKey];
+            
+                    updatedCycles[cycleKey] = cycleArray.map((item, index) => {
+                        if (index == minCycKey) {
+                            return {
+                                ...item,
+                                cycleDuration: item.cycleDuration + diff,
+                                fertStart: addSubDays(item.fertStart, diff),
+                                fertEnd: addSubDays(item.fertEnd, diff),
+                                ovulationStart: addSubDays(item.ovulationStart, diff),
+                                ovulationEnd: addSubDays(item.ovulationEnd, diff),
+                                cycleEnd: addSubDays(item.cycleEnd, diff)
+                            };
+                        } else if (index > minCycKey) {
+                            return {
+                                ...item,
+                                start: addSubDays(item.start, diff),
+                                periodEnd: addSubDays(item.periodEnd, diff),
+                                cycleDuration: item.cycleDuration + diff,
+                                fertStart: addSubDays(item.fertStart, diff),
+                                fertEnd: addSubDays(item.fertEnd, diff),
+                                ovulationStart: addSubDays(item.ovulationStart, diff),
+                                ovulationEnd: addSubDays(item.ovulationEnd, diff),
+                                cycleEnd: addSubDays(item.cycleEnd, diff)
+                            }
+                        }
+                        return item;
+                    });
                 });
-            });
+
+            } else if (title == 'Fertility Window') {
+                for (const cycleKey of Object.keys(updatedCycles[selectedLabel])) {
+                
+                    if (updatedCycles[selectedLabel][cycleKey].fertStart === oldStart) {
+                        minCycKey = cycleKey;
+                        
+                        console.log(cycleKey);
+                        break;
+                    }
+                }
+
+                Object.keys(updatedCycles).forEach(cycleKey => {
+                    let cycleArray = updatedCycles[cycleKey];
+            
+                    updatedCycles[cycleKey] = cycleArray.map((item, index) => {
+                        if (index >= minCycKey) {
+                            return {
+                                ...item,
+                                fertStart: addSubDays(item.fertStart, diff),
+                                fertEnd: addSubDays(item.fertEnd, diff)
+                            };
+                        }
+                        return item;
+                    });
+                });
+
+            } else if (title == 'Ovulation') {
+                for (const cycleKey of Object.keys(updatedCycles[selectedLabel])) {
+                
+                    if (updatedCycles[selectedLabel][cycleKey].ovulationStart === oldStart) {
+                        minCycKey = cycleKey;
+                        
+                        console.log(cycleKey);
+                        break;
+                    }
+                }
+
+                Object.keys(updatedCycles).forEach(cycleKey => {
+                    let cycleArray = updatedCycles[cycleKey];
+            
+                    updatedCycles[cycleKey] = cycleArray.map((item, index) => {
+                        if (index >= minCycKey) {
+                            return {
+                                ...item,
+                                ovulationStart: addSubDays(item.ovulationStart, diff),
+                                ovulationEnd: addSubDays(item.ovulationEnd, diff)
+                            };
+                        }
+                        return item;
+                    });
+                });
+            }
 
             chrome.storage.local.set({ cycles: updatedCycles }, () => { 
                 console.log("Updated cycles saved:", updatedCycles);
