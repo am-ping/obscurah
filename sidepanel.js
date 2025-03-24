@@ -184,6 +184,7 @@ class BaseController {
     
             chrome.storage.local.set({ cycles: updatedCycles }, () => { 
                 console.log("Updated cycles saved:", updatedCycles);
+                document.querySelector('.selectedLabel').click();
             });
         });
     }
@@ -331,8 +332,9 @@ class CycleTracker extends BaseController {
             this.loadLabels();
         });
 
-        document.getElementById('genColl').click();
-        document.getElementById('labels').click();
+        setTimeout(() => {
+            document.getElementById('labels').click();
+        }, 200)
     }    
 }
 
